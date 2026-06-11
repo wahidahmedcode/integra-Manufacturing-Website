@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dev & production dependencies
-RUN npm ci
+RUN npm install
 
 # Copy all engineering assets and source code
 COPY . .
@@ -29,7 +29,7 @@ ENV NODE_ENV=production
 COPY package*.json ./
 
 # Install ONLY production dependencies to optimize container footprint
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # Copy compiled bundles and assets from compiling stage
 COPY --from=builder /app/dist ./dist
