@@ -25,7 +25,7 @@ spec:
       #   - name: registry-credentials
       containers:
         - name: web
-          image: sarowarhosen1101/integra-portal:latest # Match Docker Hub tag template
+          image: wahidahmed01456987/integra-manufacturing-website:latest # Match Docker Hub tag template
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
