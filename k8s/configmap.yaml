@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: integra-config
+  namespace: integramanufactureapp
+  labels:
+    app: integra-portal
+    tier: frontend-backend
+data:
+  # The public domain/IP address where your application will be served
+  APP_URL: "https://integra-portal.example.com"
+  NODE_ENV: "production"

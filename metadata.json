@@ -1,0 +1,6 @@
+{
+  "name": "Integra Global Manufacturing",
+  "description": "An enterprise-grade, high-fidelity digital portal for a global industrial manufacturing and engineering enterprise, featuring a customer ERP portal, live IoT factory telemetry, and AI-powered custom fabrication quoting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

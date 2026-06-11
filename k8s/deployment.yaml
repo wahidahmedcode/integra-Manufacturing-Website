@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: integra-portal
+  namespace: integramanufactureapp
+  labels:
+    app: integra-portal
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: integra-portal
+  template:
+    metadata:
+      labels:
+        app: integra-portal
+    spec:
+      # Optional: reference registry credentials if pulling from a private registry
+      # imagePullSecrets:
+      #   - name: registry-credentials
+      containers:
+        - name: web
+          image: sarowarhosen1101/integra-portal:latest # Match Docker Hub tag template
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: integra-config
+                  key: NODE_ENV
+            - name: APP_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: integra-config
+                  key: APP_URL
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: integra-secrets
+                  key: GEMINI_API_KEY
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 2
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false # Set to false since the container serves build logs/cache dynamic content if initialized
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
